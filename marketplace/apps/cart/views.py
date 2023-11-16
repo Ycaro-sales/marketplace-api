@@ -3,4 +3,6 @@ from rest_framework import viewsets
 from marketplace.apps.cart.models import Cart, CartItem, Product
 
 
-# Create your views here.
+class CartViewSet(viewsets.ModelViewSet):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
