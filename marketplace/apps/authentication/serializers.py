@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from authentication.models import UserManager
 
 
 class UserSerializer(serializers.Serializer):
@@ -7,4 +8,4 @@ class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=200)
 
     def create(self, validated_data):
-        return User.objects.create(**validated_data)
+        return UserManager.create(**validated_data)
