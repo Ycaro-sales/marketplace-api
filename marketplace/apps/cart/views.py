@@ -30,3 +30,4 @@ class CartItemViewSet(generics.ListCreateAPIView):
 class ProductViewSet(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated, isStaffOrReadOnly]
