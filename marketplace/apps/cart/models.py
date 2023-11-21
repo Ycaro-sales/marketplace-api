@@ -1,5 +1,23 @@
 from django.db import models
+from django.db import transaction
 import uuid
+
+
+class CartManager(models.Manager):
+    @transaction.atomic
+    def create_cart(self, user):
+        cart = self.create(user=user)
+        return cart
+
+    @transaction.atomic
+    def add_item(self, cart, item, quantity):
+        cart_item = CartItem.objects.create(
+            item=item, quantity=quantity, cart=cart)
+        return cart_item
+
+    def remove_item(self, cart, item):
+        cart_item = CartItem.objects.get(CartItem=item, cart=cart)
+        cart_item.delete()
 
 
 class Cart(models.Model):
