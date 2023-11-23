@@ -4,6 +4,10 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
+from marketplace.apps.authentication.views import (
+    CustomerViewSet,
+    ManagerViewSet,
+)
 
 urlpatterns = [
     path('login/', ),
