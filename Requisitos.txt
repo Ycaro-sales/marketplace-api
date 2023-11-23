@@ -1,0 +1,10 @@
+Requisitos:
+
+- Cliente so pode ter acesso ao seu carrinho
+- Cada carrinho pode ter n produtos
+- Classe de relacionamento entre os produtos e o carrinho
+
+Permissões
+- Produto pode ser criado pelo administrador de produtos
+- Cada usuário só terá acesso ao seu carrinho 
+

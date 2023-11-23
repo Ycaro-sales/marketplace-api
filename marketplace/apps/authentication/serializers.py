@@ -1,11 +1,22 @@
 from rest_framework import serializers
-from authentication.models import CustomerManager
+from authentication.models import Customer, User
+from marketplace.apps.store.serializers import CartField
 
 
-class CustomerSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=200)
-    password = serializers.CharField(max_length=200)
-    email = serializers.EmailField(max_length=200)
+class CustomerSerializer(serializers.ModelSerializer):
+    cart = CartField(read_only=True)
 
     def create(self, validated_data):
-        return CustomerManager.create(**validated_data)
+        return Customer.objects.create_customer(**validated_data)
+
+    class Meta:
+        fields = ('id', 'username', 'email', 'password', 'cart')
+
+
+class ManagerSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        return User.objects.create(**validated_data, is_staff=True)
+
+    class Meta:
+        fields = ['id', 'username', 'email', 'password']
+
