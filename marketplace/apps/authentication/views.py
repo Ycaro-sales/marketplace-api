@@ -1,10 +1,11 @@
-from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, viewsets
+from marketplace.apps.authentication.models import Customer
+from marketplace.apps.authentication.serializers import CustomerSerializer
 
 
-class CustomerViewSet(generics.RetrieveUpdateDestroyAPIView):
+class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    permission_classes = [permissions.IsAuthenticated, isOwnerOrAdmin]
+    # permission_classes = [permissions.IsAuthenticated, isOwnerOrAdmin]
 
 

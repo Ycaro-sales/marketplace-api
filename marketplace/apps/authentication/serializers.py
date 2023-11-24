@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from authentication.models import Customer, User
+from marketplace.apps.authentication.models import Customer, DefaultUser
 from marketplace.apps.store.serializers import CartField
 
 
@@ -15,7 +15,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class ManagerSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
-        return User.objects.create(**validated_data, is_staff=True)
+        return DefaultUser.objects.create(**validated_data, is_staff=True)
 
     class Meta:
         fields = ['id', 'username', 'email', 'password']
