@@ -20,12 +20,16 @@ class CartField(serializers.RelatedField):
                 },
             })
 
+        owner = {
+            'id': value.owner.id,
+            'username': value.owner.username,
+            'email': value.owner.email,
+        }
         return {
             'id': value.id,
-            'owner': value.owner,
+            'owner': owner,
             'items': items,
             'created_at': value.created_at,
-            'updated_at': value.updated_at,
         }
 
     def to_internal_value(self, data):
@@ -40,7 +44,7 @@ class CartSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ('id', 'created_at', 'updated_at', 'owner')
+        fields = ('id', 'created_at', 'owner')
 
 
 class CartItemSerializer(serializers.HyperlinkedModelSerializer):
@@ -66,5 +70,5 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'user', 'created_at', 'updated_at')
+        fields = ('id', 'name', 'price', 'description')
 

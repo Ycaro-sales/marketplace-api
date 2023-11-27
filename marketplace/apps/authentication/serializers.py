@@ -10,6 +10,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         return Customer.objects.create_customer(**validated_data)
 
     class Meta:
+        model = Customer
         fields = ('id', 'username', 'email', 'password', 'cart')
 
 
@@ -18,5 +19,5 @@ class ManagerSerializer(serializers.ModelSerializer):
         return DefaultUser.objects.create(**validated_data, is_staff=True)
 
     class Meta:
-        fields = ['id', 'username', 'email', 'password']
+        fields = ('id', 'username', 'email', 'password')
 

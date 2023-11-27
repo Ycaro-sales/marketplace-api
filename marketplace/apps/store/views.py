@@ -1,20 +1,26 @@
 from rest_framework import (
-    generics,
     viewsets,
     mixins,
     status,
-    # permissions,
+    permissions,
 )
 from rest_framework.response import Response
 from marketplace.apps.store.models import Cart, CartItem, Product
 from marketplace.apps.store.serializers import CartSerializer, CartItemSerializer, ProductSerializer
-# from marketplace.apps.store.permissions import isOwner
+from marketplace.apps.store.permissions import IsOwner
 
 
-class CartViewSet(generics.ListAPIView):
+class CartView(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet
+):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    # permission_classes = [permissions.IsAuthenticated, isStaff]
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+    def get_queryset(self):
+        return Cart.objects.all().filter(owner=self.request.user)
 
 
 class CartItemViewSet(
@@ -26,6 +32,7 @@ class CartItemViewSet(
 ):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
+    permission_classes = [permissions.IsAuthenticated, ]
 
     def create(self, request, *args, **kwargs):
         data = dict(**request.data)
@@ -43,7 +50,8 @@ class CartItemViewSet(
         return CartItem.objects.all().filter(cart=self.request.user.cart)
 
 
-class ProductViewSet(generics.ListCreateAPIView):
+class ProductViewSet(viewsets.ModelViewSet
+                     ):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # permission_classes = [permissions.IsAuthenticated, isStaffOrReadOnly]

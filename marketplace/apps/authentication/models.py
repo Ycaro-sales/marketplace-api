@@ -11,13 +11,16 @@ class DefaultUser(AbstractUser):
 
 
 class CustomerManager(models.Manager):
+
     @transaction.atomic
-    def create_customer(self, email, password):
+    def create_customer(self, username, email, password):
         from marketplace.apps.store.models import Cart
 
-        customer = self.create(email=email, password=password)
+        customer = Customer.objects.create(username=username, email=email, password=password)
+        customer.save()
 
         customer.cart = Cart.objects.create(owner=customer)
+        customer.save()
 
         return customer
 

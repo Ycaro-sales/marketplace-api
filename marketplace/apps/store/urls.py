@@ -1,19 +1,18 @@
-from django.urls import path
+from django.urls import path, include
 from marketplace.apps.store.views import (
     CartViewSet,
     CartItemViewSet,
     ProductViewSet,
 )
 
-from rest_framework import routers, include
+from rest_framework import routers
 
 router = routers.DefaultRouter()
 
-router.register('', ProductViewSet, basename='product')
-router.register('cart', CartViewSet, basename='cart')
-router.register('cart/items', CartItemViewSet, basename='cart_item')
+router.register(r'', ProductViewSet, basename='product')
+router.register(r'cart', CartViewSet, basename='cart')
+router.register(r'cart/items', CartItemViewSet, basename='cart_item')
 
 urlpatterns = [
     path('', include(router.urls)),
 ]
-
