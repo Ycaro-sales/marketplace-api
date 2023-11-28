@@ -6,7 +6,6 @@ from rest_framework import (
 )
 
 from rest_framework.response import Response
-from rest_framework_simplejwt import authentication
 from marketplace.apps.authentication.permissions import IsOwnerOrStaff
 from marketplace.apps.store.models import Cart, CartItem, Product
 from marketplace.apps.store.serializers import CartSerializer, CartItemSerializer, ProductSerializer
@@ -21,10 +20,11 @@ class CartViewSet(
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrStaff]
-    authentication_classes = [authentication.JWTAuthentication]
 
     def get_queryset(self):
-        return Cart.objects.all().filter(owner=self.request.user)
+        if self.request.user.is_staff:
+            return Cart.objects.all()
+        return Cart.objects.filter(owner=self.request.user)
 
 
 class CartItemViewSet(
@@ -37,7 +37,6 @@ class CartItemViewSet(
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
     permission_classes = [permissions.IsAuthenticated, IsCartOwner]
-    authentication_classes = [authentication.JWTAuthentication]
 
     def create(self, request, *args, **kwargs):
         data = dict(**request.data)
@@ -58,4 +57,4 @@ class CartItemViewSet(
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsStaffOrReadonly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsStaffOrReadonly]

@@ -16,8 +16,9 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class ManagerSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
-        return DefaultUser.objects.create(**validated_data, is_staff=True)
+        return DefaultUser.objects.create_superuser(**validated_data)
 
     class Meta:
+        model = DefaultUser
         fields = ('id', 'username', 'email', 'password')
 
