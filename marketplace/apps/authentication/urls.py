@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from rest_framework import routers
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -17,6 +17,7 @@ router.register(r'customer', CustomerViewSet)
 
 urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
+    path('', include(router.urls)),
     path('login/', TokenObtainPairView.as_view(), name='login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify')

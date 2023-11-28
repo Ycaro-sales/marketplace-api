@@ -15,7 +15,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
         if user.is_staff:
             queryset = Customer.objects.all()
         else:
-            queryset = Customer.objects.get(user=self.request.user)
+            queryset = Customer.objects.filter(id=user.id)
 
         return queryset
 
