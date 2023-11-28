@@ -7,7 +7,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     cart = CartField(read_only=True)
 
     def create(self, validated_data):
-        return Customer.objects.create_customer(**validated_data)
+        return Customer.objects.create_user(**validated_data)
 
     class Meta:
         model = Customer

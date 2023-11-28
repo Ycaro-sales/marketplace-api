@@ -4,20 +4,24 @@ from rest_framework import (
     status,
     permissions,
 )
+
 from rest_framework.response import Response
+from rest_framework_simplejwt import authentication
+from marketplace.apps.authentication.permissions import IsOwnerOrStaff
 from marketplace.apps.store.models import Cart, CartItem, Product
 from marketplace.apps.store.serializers import CartSerializer, CartItemSerializer, ProductSerializer
-from marketplace.apps.store.permissions import IsOwner
+from marketplace.apps.store.permissions import IsCartOwner, IsStaffOrReadonly
 
 
-class CartView(
+class CartViewSet(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     viewsets.GenericViewSet
 ):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrStaff]
+    authentication_classes = [authentication.JWTAuthentication]
 
     def get_queryset(self):
         return Cart.objects.all().filter(owner=self.request.user)
@@ -32,11 +36,12 @@ class CartItemViewSet(
 ):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
-    permission_classes = [permissions.IsAuthenticated, ]
+    permission_classes = [permissions.IsAuthenticated, IsCartOwner]
+    authentication_classes = [authentication.JWTAuthentication]
 
     def create(self, request, *args, **kwargs):
         data = dict(**request.data)
-        data['cart'] = request.user.cart.id
+        data['cart'] = Cart.objects.filter(owner=request.user)
 
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
@@ -47,11 +52,10 @@ class CartItemViewSet(
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def get_queryset(self):
-        return CartItem.objects.all().filter(cart=self.request.user.cart)
+        return CartItem.objects.filter(cart=Cart.objects.filter(owner=self.request.user))
 
 
-class ProductViewSet(viewsets.ModelViewSet
-                     ):
+class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    # permission_classes = [permissions.IsAuthenticated, isStaffOrReadOnly]
+    permission_classes = [IsStaffOrReadonly]

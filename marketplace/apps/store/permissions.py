@@ -27,6 +27,17 @@ class IsOwner(permissions.BasePermission):
         return obj.user == request.user
 
 
+class IsCartOwner(permissions.BasePermission):
+    """
+    Custom permission to only allow owners of an object to edit it.
+    """
+
+    def has_object_permission(self, request, view, obj):
+
+        # Write permissions are only allowed to the owner of the object.
+        return obj.cart == request.user.cart
+
+
 class IsStaffOrReadonly(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.

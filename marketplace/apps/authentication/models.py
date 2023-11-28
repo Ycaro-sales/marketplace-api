@@ -1,6 +1,7 @@
 import uuid
 from django.db import models, transaction
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
+from django.contrib.auth.hashers import make_password
 
 
 class DefaultUser(AbstractUser):
@@ -10,19 +11,29 @@ class DefaultUser(AbstractUser):
         db_table = 'users'
 
 
-class CustomerManager(models.Manager):
+class CustomerManager(UserManager):
 
     @transaction.atomic
-    def create_customer(self, username, email, password):
+    def _create_user(self, username, email, password, **extra_fields):
         from marketplace.apps.store.models import Cart
+        if not username:
+            raise ValueError("The given username must be set")
+        email = self.normalize_email(email)
 
-        customer = Customer.objects.create(username=username, email=email, password=password)
-        customer.save()
+        username = Customer.normalize_username(username)
+        user = self.model(username=username, email=email, **extra_fields)
+        user.password = make_password(password)
+        user.save(using=self._db)
 
-        customer.cart = Cart.objects.create(owner=customer)
-        customer.save()
+        cart = Cart.objects.create(owner=user)
+        cart.save()
 
-        return customer
+        return user
+
+    def create_user(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
+        return self._create_user(username, email, password, **extra_fields)
 
 
 class Customer(DefaultUser):

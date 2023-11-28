@@ -16,10 +16,8 @@ router = routers.DefaultRouter()
 router.register(r'customer', CustomerViewSet)
 
 urlpatterns = [
-    # path('login/', ),
     path('signup/', SignUpView.as_view(), name='signup'),
-    path('', include(router.urls)),
-    path('jwt/create/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('jwt/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('jwt/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('login/', TokenObtainPairView.as_view(), name='login'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/verify/', TokenVerifyView.as_view(), name='token_verify')
 ]
