@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth import authenticate
 from marketplace.apps.authentication.models import Customer, DefaultUser
 from marketplace.apps.store.serializers import CartField
 

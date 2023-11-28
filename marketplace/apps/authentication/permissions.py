@@ -1,4 +1,12 @@
 from rest_framework import permissions
+from marketplace.apps.authentication.models import Customer
+
+
+class IsCustomer(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+
+        return Customer.objects.filter(user=request.user).exists()
 
 
 class IsOwnerOrStaff(permissions.BasePermission):

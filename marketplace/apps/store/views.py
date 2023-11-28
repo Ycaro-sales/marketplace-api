@@ -6,7 +6,7 @@ from rest_framework import (
 )
 
 from rest_framework.response import Response
-from marketplace.apps.authentication.permissions import IsOwnerOrStaff
+from marketplace.apps.authentication.permissions import IsOwnerOrStaff, IsCustomer
 from marketplace.apps.store.models import Cart, CartItem, Product
 from marketplace.apps.store.serializers import CartSerializer, CartItemSerializer, ProductSerializer
 from marketplace.apps.store.permissions import IsCartOwner, IsStaffOrReadonly
@@ -22,8 +22,6 @@ class CartViewSet(
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrStaff]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            return Cart.objects.all()
         return Cart.objects.filter(owner=self.request.user)
 
 
@@ -36,7 +34,7 @@ class CartItemViewSet(
 ):
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
-    permission_classes = [permissions.IsAuthenticated, IsCartOwner]
+    permission_classes = [permissions.IsAuthenticated, IsCustomer, IsCartOwner]
 
     def create(self, request, *args, **kwargs):
         data = dict(**request.data)
