@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import (
 )
 from marketplace.apps.authentication.views import (
     CustomerViewSet,
+    ManagerViewSet,
     SignUpView,
     # ManagerViewSet,
 )
@@ -14,6 +15,7 @@ from marketplace.apps.authentication.views import (
 router = routers.DefaultRouter()
 
 router.register(r'customer', CustomerViewSet)
+router.register(r'staff/customers', ManagerViewSet)
 
 urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),

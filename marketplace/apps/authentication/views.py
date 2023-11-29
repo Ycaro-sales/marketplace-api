@@ -2,22 +2,18 @@ from rest_framework import generics, viewsets, permissions, mixins
 from marketplace.apps.authentication.models import Customer
 from marketplace.apps.authentication.serializers import CustomerSerializer, ManagerSerializer
 
-from rest_framework_simplejwt import authentication
 
-
-class CustomerViewSet(viewsets.ModelViewSet):
+class CustomerViewSet(mixins.CreateModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin,
+                      mixins.ListModelMixin,
+                      viewsets.GenericViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        if user.is_staff:
-            queryset = Customer.objects.all()
-        else:
-            queryset = Customer.objects.filter(id=user.id)
-
-        return queryset
+        return Customer.objects.filter(user=self.request.user)
 
 
 class SignUpView(generics.CreateAPIView):
