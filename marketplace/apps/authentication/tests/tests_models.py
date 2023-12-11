@@ -1,6 +1,9 @@
 from django.test import TestCase
+
 from marketplace.apps.authentication.models import Customer
 from marketplace.apps.store.models import Cart
+
+
 # from rest_framework.test import APIClient, RequestsClient
 
 # Create your tests here.
