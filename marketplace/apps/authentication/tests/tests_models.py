@@ -2,14 +2,16 @@ from django.test import TestCase
 
 from marketplace.apps.authentication.models import Customer
 from marketplace.apps.store.models import Cart
+<<<<<<< HEAD:marketplace/apps/authentication/tests/tests_models.py
 
 
 # from rest_framework.test import APIClient, RequestsClient
 
 # Create your tests here.
+=======
+>>>>>>> cda8398 (Created Tests):marketplace/apps/authentication/tests.py
 
 
-# TODO: Create tests for the Customer endpoint
 class CustomerModelTestCase(TestCase):
 
     def setUp(self):
@@ -29,11 +31,6 @@ class CustomerModelTestCase(TestCase):
         self.assertEqual(customer.is_active, True)
         self.assertEqual(customer.is_staff, False)
         self.assertEqual(Cart.objects.get(owner=customer).owner, customer)
-
-
-# TODO: Create tests for the Customer endpoint
-class CustomerEndpointTestCase(TestCase):
-    pass
 
 
 class ManagerModelTestCase(TestCase):
@@ -56,6 +53,3 @@ class ManagerModelTestCase(TestCase):
         self.assertEqual(Cart.objects.get(owner=manager).DoesNotExist, True)
 
 
-# TODO: Create tests for the Manager endpoint
-class ManagerEndpointTestCase(TestCase):
-    pass

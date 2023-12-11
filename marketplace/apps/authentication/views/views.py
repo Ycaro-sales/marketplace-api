@@ -1,5 +1,5 @@
 from rest_framework import generics, viewsets, permissions, mixins
-from marketplace.apps.authentication.models import Customer
+from marketplace.apps.authentication.models.models import Customer
 from marketplace.apps.authentication.serializers import CustomerSerializer, ManagerSerializer
 
 

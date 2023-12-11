@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
-from marketplace.apps.authentication.views import (
+from marketplace.apps.authentication.views.views import (
     CustomerViewSet,
     ManagerViewSet,
     SignUpView,

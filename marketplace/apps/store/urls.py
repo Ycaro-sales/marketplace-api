@@ -1,5 +1,5 @@
 from django.urls import path, include
-from marketplace.apps.store.views import (
+from marketplace.apps.store.views.views import (
     CartViewSet,
     CartItemViewSet,
     ProductViewSet,
